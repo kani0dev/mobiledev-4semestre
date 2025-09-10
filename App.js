@@ -7,17 +7,24 @@ export default function App() {
   
   const [pesso, setPesso] = useState('');
   const [altura , setAltura] = useState('')
-  const [result, setReslt] = useState(null)
+  const [result, setReslt] = useState()
   const [massage , setMessage] = useState('')
 
   const calcular = () => {
     if(pesso && altura){
-      console.log(pesso/(altura*altura));
-      
-      alert(pesso/(altura*altura))
-      return pesso/(altura*altura)
+      let imc =  pesso.replace(',','.')/(altura.replace(',','.')*altura.replace(',','.'));
+      setReslt(imc.toFixed(2));
+
+      switch(imc){
+        case imc <= 18.5: setMessage("magro")
+        case imc > 18.5 && imc <= 24.9: setMessage("normal\npesso: ", imc)
+        case imc > 25 && imc <= 29.9: setMessage("gordinho\npesso: ", imc)
+        case imc > 30 && imc <= 34.9 : setMessage("Gigantesco\npesso: ", imc)
+        default : setMessage("KRLTAMPANDO O SOL MANEKKKKKKKKKK\npesso: ", imc)
+      }
+
     }else{
-      alert("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+      alert("tem nao")
     }
   }
 
@@ -33,19 +40,23 @@ export default function App() {
         <TextInput placeholder='pesso'
         keyboardType='numeric'
         value={altura}
-        onChange={setAltura}
+        onChangeText={setAltura}
         />
         
         <TextInput placeholder='altura'
         keyboardType='numeric'
         value={pesso}
-        onChange={setPesso}
+        onChangeText={setPesso}
         />
       </View>
 
-      <Button onPress={() => calcular()}title='hihi'>
+      <Button onPress={() => calcular()}title='oi o q loco kkkkk'>
         calcular
       </Button>
+      <h2>
+        {massage}
+        {pesso}
+      </h2>
     </View>
   );
 }
