@@ -1,138 +1,83 @@
-import { View, Text, StyleSheet, TextInput, Pressable, Alert } from "react-native";
+import { View, Text, StyleSheet, TextInput, Button, FlatList } from "react-native";
 import { useState } from 'react';
 
-export default function App() {
+export default function App (){
 
-  const [peso, setPeso] = useState('');
+  const [ task, setTask ] = useState("");
+  const [ tasks, setTasks ] = useState([]);
 
-  const [altura, setAltura] = useState('');
-
-  const [resultado, setResultado] = useState(null);
-
-  const [diag, setDiag] = useState('');
-
-  const calcularIMC = () => {
-
-    if (peso !== '' && altura !== '') {
-      let pesoNum = (peso.replace(",", "."));
-
-      let alturaNum = (altura.replace(",", "."));
-
-      let imc = pesoNum / (alturaNum * alturaNum);
-
-      setResultado(imc.toFixed(2));
-
-      if (imc < 18.5) {
-        setDiag('Magreza');
-      }
-
-      else if (imc >= 18.5 && imc <= 24.9) {
-        setDiag('Normal');
-      }
-
-      else if (imc >= 25 && imc <= 29.9) {
-        setDiag('Sobrepeso');
-      }
-
-      else if (imc >= 30 && imc <= 39.9) {
-        setDiag('Obesidade');
-      }
-
-      else {
-        setDiag('Obesidade Grave');
-      }
-
-    } else {
-      alert('Por favor preencha o campo de peso e altura');
-    }
-
+  const addTask = () => {
+    setTasks([...tasks, 
+      {key: Math.random().toString(), 
+      value: task}])
+      setTask("");
+      console.log(task);
+      
   }
 
-  return (
-    <View style={styles.app}>
-      <Text style={styles.titulo}>Calcule seu IMC</Text>
 
-      <View>
-        <TextInput
-          style={styles.input}
-          placeholder="Digite o peso"
-          keyboardType="numeric"
-          value={peso}
-          onChangeText={setPeso}
-        />
-      </View>
+  return(
+    <View style={estilos.app}>
+      <Text style={estilos.titulo}>
+        Lista de Tarefas
+      </Text>
 
-      <View>
-        <TextInput
-          style={styles.input}
-          placeholder="Digite a altura"
-          keyboardType="numeric"
-          value={altura}
-          onChangeText={setAltura}
-        />
-      </View>
+      <TextInput
+      style={estilos.input}
+      placeholder="Adicionar Nova Tarefa"
+      onChangeText={setTask}
+      onPress={task}
+      value={task}/>
+      
 
-      <View>
-        <Pressable
-          style={({ pressed }) => [
-            styles.btn,
-            pressed && { opacity: 0.8, backgroundColor: "#000000" },
-          ]}
-          onPress={calcularIMC}
-        >
-          <Text style={styles.btnText}>Clique aqui</Text>
-        </Pressable>
-      </View>
+      <Button style={estilos.botao}
+      title="Adicionar"
+      onPress={addTask}>
+      </Button>
 
-      <View style={styles.textos}>
-        <Text>Resultado: {resultado}</Text>
-        <Text>Diagnostico: {diag}</Text>
-      </View>
+      <FlatList
+      data={tasks}
+      renderItem={({ item }) =>{
+        <Text
+        style={estilos.tarefa}>
+          {item.value}
+        </Text>
+      }} />
     </View>
-  );
+  )
 }
 
-const styles = StyleSheet.create({
+const estilos = StyleSheet.create ({
   app: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#ccc",
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#ccc'
   },
   titulo: {
-    fontSize: 30,
-    color: "black",
-    fontWeight: "bold",
-    marginBottom: 20,
+    fontSize: 25,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginTop: 150,
+    marginBottom: 50,
   },
   input: {
-    borderColor: "black",
-    borderWidth: 2,
+    borderWidth: 1.5,
+    borderRadius: 5,
+    height: 60,
     width: 300,
-    height: 40,
+    marginBottom: 50,
     fontSize: 15,
-    marginBottom: 20,
-    paddingHorizontal: 10,
-    borderRadius: 20,
-    textAlign: "center",
-    backgroundColor: "white",
+    textAlign: 'center'
   },
-  btn: {
-    justifyContent: "center",
-    alignItems: "center",
-    borderWidth: 2,
-    width: 140,
-    height: 40,
-    borderRadius: 10,
-    backgroundColor: "#7DDA58",
-    marginBottom: 30,
-  },
-  btnText: {
+  tarefa: {
     fontSize: 18,
-    color: "white",
-    fontWeight: "bold",
+    borderBottomWidth: 5,
+    borderBottomColor: 'red',
+    marginBottom: 25,
+
   },
-  textos: {
-    alignItems: "center",
-  },
-});
+  // botao: {
+  //   borderRadius: 5,
+  // }
+})
