@@ -26,7 +26,6 @@ export default function App (){
       style={estilos.input}
       placeholder="Adicionar Nova Tarefa"
       onChangeText={setTask}
-      onPress={task}
       value={task}/>
       
 
@@ -35,14 +34,18 @@ export default function App (){
       onPress={addTask}>
       </Button>
 
+    <div style={estilos.exibicao}>
       <FlatList
+      style={ estilos.lista}
       data={tasks}
-      renderItem={({ item }) =>{
+      renderItem={({ item }) => (
         <Text
         style={estilos.tarefa}>
           {item.value}
         </Text>
-      }} />
+        )
+      } />
+    </div>
     </View>
   )
 }
@@ -73,9 +76,18 @@ const estilos = StyleSheet.create ({
   tarefa: {
     fontSize: 18,
     borderBottomWidth: 5,
-    borderBottomColor: 'red',
+    borderBottomColor: 'grey',
     marginBottom: 25,
 
+  },
+  lista: {
+    paddingTop: 5,
+  },
+  exibicao: {
+    borderColor: 'black',
+    marginTop: 50,
+    flex: 1,
+    justifyContent: 'center',
   },
   // botao: {
   //   borderRadius: 5,
