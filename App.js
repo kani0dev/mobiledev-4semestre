@@ -12,15 +12,19 @@ export default function App() {
 
   const calcular = () => {
     if(pesso && altura){
-      let imc =  pesso.replace(',','.')/(altura.replace(',','.')*altura.replace(',','.'));
+      let imc =  pesso.replace(',','.')/(altura.replace(',','.')^2);
+      
       setReslt(imc.toFixed(2));
-
+      console.log(imc);
+      console.log(result);
+      
+      
       switch(imc){
-        case imc <= 18.5: setMessage("magro")
-        case imc > 18.5 && imc <= 24.9: setMessage("normal\npesso: ", imc)
-        case imc > 25 && imc <= 29.9: setMessage("gordinho\npesso: ", imc)
-        case imc > 30 && imc <= 34.9 : setMessage("Gigantesco\npesso: ", imc)
-        default : setMessage("KRLTAMPANDO O SOL MANEKKKKKKKKKK\npesso: ", imc)
+        case imc < 18.5: setMessage("magro") ;break;
+        case imc > 18.5 && imc <= 24.9: setMessage("normal\npesso: ", imc);break;
+        case imc > 25 && imc <= 29.9: setMessage("gordinho\npesso: ", imc);break;
+        case imc > 30 && imc <= 34.9 : setMessage("Gigantesco\npesso: ", imc);break;
+        default : setMessage("KRLTAMPANDO O SOL MANEKKKKKKKKKK\npesso: ", imc);break;
       }
 
     }else{
@@ -37,13 +41,13 @@ export default function App() {
       <StatusBar style="auto" />
       
       <View>
-        <TextInput placeholder='pesso'
+        <TextInput placeholder='altura'
         keyboardType='numeric'
         value={altura}
         onChangeText={setAltura}
         />
         
-        <TextInput placeholder='altura'
+        <TextInput placeholder='pesso'
         keyboardType='numeric'
         value={pesso}
         onChangeText={setPesso}
