@@ -1,62 +1,72 @@
 import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { Button, TextInput } from 'react-native-web';
+import { StyleSheet, Text, View, TextInput, Button, Alert } from 'react-native';
 
 export default function App() {
-  
-  const [pesso, setPesso] = useState('');
-  const [altura , setAltura] = useState('')
-  const [result, setReslt] = useState()
-  const [massage , setMessage] = useState('')
+  const [peso, setPeso] = useState('');
+  const [altura, setAltura] = useState('');
+  const [resultado, setResultado] = useState(null);
+  const [mensagem, setMensagem] = useState('');
 
   const calcular = () => {
-    if(pesso && altura){
-      let imc =  pesso.replace(',','.')/(altura.replace(',','.')*altura.replace(',','.'));
-      setReslt(imc.toFixed(2));
+    if (peso && altura) {
+      const pesoNum = parseFloat(peso.replace(',', '.'));
+      const alturaNum = parseFloat(altura.replace(',', '.'));
 
-      switch(imc){
-        case imc <= 18.5: setMessage("magro")
-        case imc > 18.5 && imc <= 24.9: setMessage("normal\npesso: ", imc)
-        case imc > 25 && imc <= 29.9: setMessage("gordinho\npesso: ", imc)
-        case imc > 30 && imc <= 34.9 : setMessage("Gigantesco\npesso: ", imc)
-        default : setMessage("KRLTAMPANDO O SOL MANEKKKKKKKKKK\npesso: ", imc)
+      if (isNaN(pesoNum) || isNaN(alturaNum) || alturaNum <= 0) {
+        Alert.alert('Erro', 'Digite valores válidos.');
+        return;
       }
 
-    }else{
-      alert("tem nao")
-    }
-  }
+      const imc = pesoNum / (alturaNum * alturaNum);
+      setResultado(imc.toFixed(2));
 
+      if (imc <= 18.5) {
+        setMensagem(`magreza puro osso\nIMC: ${imc.toFixed(2)}`);
+      } else if (imc > 18.5 && imc <= 24.9) {
+        setMensagem(`normal\nIMC: ${imc.toFixed(2)}`);
+      } else if (imc > 25 && imc <= 29.9) {
+        setMensagem(`Sobrepeso\nIMC: ${imc.toFixed(2)}`);
+      } else if (imc > 30 && imc <= 34.9) {
+        setMensagem(`super gordo nivel 1\nIMC: ${imc.toFixed(2)}`);
+      } else if (imc > 35 && imc <= 39.9) {
+        setMensagem(`super gordo nivel 2\nIMC: ${imc.toFixed(2)}`);
+      } else {
+        setMensagem(`Super obeso nivel deus\nIMC: ${imc.toFixed(2)}`);
+      }
+    } else {
+      Alert.alert('Erro', 'Preencha peso e altura.');
+    }
+  };
 
   return (
     <View style={styles.container}>
-      <Text>
-        Calcule seu IMC
-      </Text>
+      <Text style={styles.title}>Calcule seu IMC</Text>
       <StatusBar style="auto" />
-      
-      <View>
-        <TextInput placeholder='pesso'
-        keyboardType='numeric'
+
+      <TextInput
+        style={styles.input}
+        placeholder="Peso (kg)"
+        keyboardType="numeric"
+        value={peso}
+        onChangeText={setPeso}
+      />
+
+      <TextInput
+        style={styles.input}
+        placeholder="Altura (m)"
+        keyboardType="numeric"
         value={altura}
         onChangeText={setAltura}
-        />
-        
-        <TextInput placeholder='altura'
-        keyboardType='numeric'
-        value={pesso}
-        onChangeText={setPesso}
-        />
-      </View>
+      />
 
-      <Button onPress={() => calcular()}title='oi o q loco kkkkk'>
-        calcular
-      </Button>
-      <h2>
-        {massage}
-        {pesso}
-      </h2>
+      <Button title="Calcular IMC" onPress={calcular} />
+
+      {mensagem ? (
+        <View style={styles.resultBox}>
+          <Text style={styles.resultText}>{mensagem}</Text>
+        </View>
+      ) : null}
     </View>
   );
 }
@@ -67,5 +77,32 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+    padding: 20,
+  },
+  title: {
+    fontSize: 22,
+    marginBottom: 20,
+    fontWeight: 'bold',
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: '#999',
+    borderRadius: 8,
+    width: '80%',
+    padding: 10,
+    marginBottom: 15,
+    fontSize: 16,
+    textAlign: 'center',
+  },
+  resultBox: {
+    marginTop: 20,
+    padding: 15,
+    backgroundColor: '#f0f0f0',
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  resultText: {
+    fontSize: 18,
+    fontWeight: '600',
   },
 });
